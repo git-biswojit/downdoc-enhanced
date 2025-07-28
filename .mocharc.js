@@ -1,3 +1,4 @@
-'use strict'
+"use strict";
 
-module.exports = require('./test/harness/config.js')
+import config from "./test/harness/config.js";
+export default config;

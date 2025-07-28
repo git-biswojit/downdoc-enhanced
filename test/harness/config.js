@@ -1,38 +1,40 @@
-'use strict'
+"use strict";
+
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const config = {
   checkLeaks: true,
-  mochaGlobalTeardown () {
-    if (!this.failures) logCoverageReportPath()
+  mochaGlobalTeardown() {
+    if (!this.failures) logCoverageReportPath();
   },
-  require: __filename,
+  require: fileURLToPath(import.meta.url),
   spec: resolveSpec(),
   timeout: 10 * 60 * 1000,
-}
+};
 
-if (process.env.npm_config_watch) config.watch = true
+if (process.env.npm_config_watch) config.watch = true;
 if (process.env.CI) {
   Object.assign(config, {
     forbidOnly: true,
-    reporter: './test/harness/mocha-ci-reporter',
-    'reporter-option': ['output=reports/tests-xunit.xml'],
-  })
+    reporter: "./test/harness/mocha-ci-reporter",
+    "reporter-option": ["output=reports/tests-xunit.xml"],
+  });
 }
 
-function logCoverageReportPath () {
-  if (!process.env.NYC_PROCESS_ID) return
-  const { CI_PROJECT_PATH, CI_JOB_ID } = process.env
-  const coverageReportRelpath = 'reports/lcov-report/index.html'
+function logCoverageReportPath() {
+  if (!process.env.NYC_PROCESS_ID) return;
+  const { CI_PROJECT_PATH, CI_JOB_ID } = process.env;
+  const coverageReportRelpath = "reports/lcov-report/index.html";
   const coverageReportURL = CI_JOB_ID
     ? `https://gitlab.com/${CI_PROJECT_PATH}/-/jobs/${CI_JOB_ID}/artifacts/file/${coverageReportRelpath}`
-    : require('node:url').pathToFileURL(coverageReportRelpath)
-  console.log(`Coverage report: ${coverageReportURL}`)
+    : pathToFileURL(coverageReportRelpath);
+  console.log(`Coverage report: ${coverageReportURL}`);
 }
 
-function resolveSpec () {
-  const spec = process.argv[2]
-  if (spec && !spec.startsWith('-')) return spec
-  return 'test/**/*-test.js'
+function resolveSpec() {
+  const spec = process.argv[2];
+  if (spec && !spec.startsWith("-")) return spec;
+  return "test/**/*-test.js";
 }
 
-module.exports = config
+export default config;
