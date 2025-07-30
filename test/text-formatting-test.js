@@ -646,4 +646,82 @@ describe("text formatting", () => {
       `;
     expect(downdoc(input)).to.equal(expected);
   });
+
+  it("should convert standalone bold lines to h4 headers", () => {
+    const input = heredoc`
+      = Title
+
+      Some regular text here.
+
+      *Helpful Links*
+
+      More content here.
+
+      *Another Section*
+
+      And more content.
+      `;
+    const expected = heredoc`
+      # Title
+
+      Some regular text here.
+
+      #### Helpful Links
+
+      More content here.
+
+      #### Another Section
+
+      And more content.
+      `;
+    expect(downdoc(input)).to.equal(expected);
+  });
+
+  it("should not convert bold lines that are part of lists", () => {
+    const input = heredoc`
+      = Title
+
+      * *Install*
+      * *Use*
+      * *Configure*
+
+      *Standalone Header*
+
+      More content.
+      `;
+    const expected = heredoc`
+      # Title
+
+      * **Install**
+      * **Use**
+      * **Configure**
+
+      #### Standalone Header
+
+      More content.
+      `;
+    expect(downdoc(input)).to.equal(expected);
+  });
+
+  it("should not convert bold lines that are part of paragraphs", () => {
+    const input = heredoc`
+      = Title
+
+      This is a paragraph with *bold text* inside it.
+
+      *Standalone Header*
+
+      Another paragraph with *more bold* text.
+      `;
+    const expected = heredoc`
+      # Title
+
+      This is a paragraph with **bold text** inside it.
+
+      #### Standalone Header
+
+      Another paragraph with **more bold** text.
+      `;
+    expect(downdoc(input)).to.equal(expected);
+  });
 });
