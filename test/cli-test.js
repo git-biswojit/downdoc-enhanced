@@ -68,8 +68,9 @@ describe("downdoc", () => {
       const args = ["-h"];
       const expected = heredoc`
       downdoc ${version}
-      Usage: downdoc [OPTION]... FILE
-      Convert the specified AsciiDoc FILE to a Markdown file.${lf}
+      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
+      Convert the specified AsciiDoc FILE to a Markdown file.
+      If OUTPUT_DIR is specified, process all .adoc files in FILE directory recursively.${lf}
       `;
       await downdoc({ args, stdout });
       expect(stdout.string).to.startWith(expected);
@@ -80,8 +81,9 @@ describe("downdoc", () => {
       const args = ["-h"];
       const expectedStart = heredoc`
       downdoc ${version}
-      Usage: downdoc [OPTION]... FILE
-      Convert the specified AsciiDoc FILE to a Markdown file.${lf}
+      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
+      Convert the specified AsciiDoc FILE to a Markdown file.
+      If OUTPUT_DIR is specified, process all .adoc files in FILE directory recursively.${lf}
       `;
       const expectedIn =
         "\n  -a, --attribute name=val   set an AsciiDoc attribute; can be specified multiple times\n";
@@ -97,7 +99,7 @@ describe("downdoc", () => {
     it("should only print usage to stderr and set exit code when no options or arguments are specified", async () => {
       const args = [];
       const expected = heredoc`
-      Usage: downdoc [OPTION]... FILE
+      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
       Run 'downdoc --help' for more information.${lf}
       `;
       const p = { args, stdout, stderr };
@@ -109,7 +111,7 @@ describe("downdoc", () => {
 
     it("should only print usage to stderr and set exit code when neither args or argv are set on process", async () => {
       const expected = heredoc`
-      Usage: downdoc [OPTION]... FILE
+      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
       Run 'downdoc --help' for more information.${lf}
       `;
       const p = { stderr };
@@ -196,17 +198,20 @@ describe("downdoc", () => {
       const args = ["no-such-file.adoc"];
       const p = { args, stderr };
       await downdoc(p);
-      expect(stderr.string).to.equal("downdoc: no-such-file.adoc: No such file\n");
+      expect(stderr.string).to.equal(
+        "downdoc: no-such-file.adoc: No such file or directory\n"
+      );
       expect(p.exitCode).to.equal(1);
     });
 
-    it("should print message to stderr and set exit code when FILE is directory", async () => {
+    it("should process directory when FILE is a directory", async () => {
+      const input = "= Document Title\n\nContent.\n";
+      const expected = "# Document Title\n\nContent.\n";
       await fsp.mkdir("docs");
+      await fsp.writeFile("docs/doc.adoc", input, "utf8");
       const args = ["docs"];
-      const p = { args, stderr };
-      await downdoc(p);
-      expect(stderr.string).to.equal("downdoc: docs: Not a file\n");
-      expect(p.exitCode).to.equal(1);
+      await downdoc({ args });
+      expect("docs/doc.md").to.be.a.file().with.contents(expected);
     });
   });
 
