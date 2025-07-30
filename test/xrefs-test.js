@@ -529,7 +529,7 @@ describe("xrefs", () => {
     const expected = heredoc`
       # Title
 
-      Please refer to [contributing.adoc](contributing.adoc).
+      Please refer to [contributing.md](contributing.md).
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -558,8 +558,8 @@ describe("xrefs", () => {
     const expected = heredoc`
       # Title
 
-      Please refer to the [contributing guide](contributing.adoc).
-      The [contribution guide](contribution.adoc) will teach you how to [build the project](contribution.adoc#build-project).
+      Please refer to the [contributing guide](contributing.md).
+      The [contribution guide](contribution.md) will teach you how to [build the project](contribution.adoc#build-project).
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -574,8 +574,8 @@ describe("xrefs", () => {
     const expected = heredoc`
       # Title
 
-      Please refer to the [contributing guide](how to contribute.adoc).
-      The [contribution guide](how to contribute.adoc) will teach you how to contribute to the project.
+      Please refer to the [contributing guide](how to contribute.md).
+      The [contribution guide](how to contribute.md) will teach you how to contribute to the project.
       `;
     expect(downdoc(input)).to.equal(expected);
   });

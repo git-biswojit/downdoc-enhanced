@@ -231,7 +231,7 @@ describe("link and URL macros", () => {
     const expected = heredoc`
       # Title
 
-      [is processed](is processed.adoc)
+      [is processed](is processed.md)
 
       xref: not processed.adoc[not processed]
       `;
