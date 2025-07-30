@@ -69,6 +69,7 @@ describe("paragraphs", () => {
     expect(downdoc(input)).to.equal(input);
   });
 
+  //TODO: decide if to process or not admonition label within a paragraph
   it("should not process admonition label within a paragraph", () => {
     const input = heredoc`
       = Title
@@ -115,20 +116,15 @@ describe("paragraphs", () => {
     const expected = heredoc`
       # Title
 
-      **📌 NOTE**\\
-      Remember the oat milk.
+      > **📌 _NOTE:_** Remember the oat milk.
 
-      **❗ IMPORTANT**\\
-      Don’t forget the children!
+      > **❗ _IMPORTANT:_** Don’t forget the children!
 
-      **💡 TIP**\\
-      Look for the [warp](https://en.wikipedia.org/wiki/Warp_(video_games)) under the bridge.
+      > **💡 _TIP:_** Look for the [warp](https://en.wikipedia.org/wiki/Warp_(video_games)) under the bridge.
 
-      **🔥 CAUTION**\\
-      Slippery when wet.
+      > **🔥 _CAUTION:_** Slippery when wet.
 
-      **⚠️ WARNING**\\
-      The software you’re about to use has **not** been tested.
+      > **⚠️ _WARNING:_** The software you’re about to use has **not** been tested.
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -142,7 +138,7 @@ describe("paragraphs", () => {
     const expected = heredoc`
       # Title
 
-      **🔥 CAUTION**
+      > **🔥 _CAUTION:_**
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -157,8 +153,7 @@ describe("paragraphs", () => {
     const expected = heredoc`
       # Title
 
-      **🔥 CAUTION**
-      Slippery when wet.
+      > **🔥 _CAUTION:_** Slippery when wet.
       `;
     expect(downdoc(input)).to.equal(expected);
   });

@@ -92,6 +92,7 @@ describe("downdoc()", () => {
       expect(downdoc(input)).to.equal(expected);
     });
 
+    //TODO: decide if to process or not admonition label within a paragraph
     it("should not process non-paragraph blocks in Markdown-style blockquote", () => {
       const input = heredoc`
       > . one

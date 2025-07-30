@@ -164,12 +164,10 @@ describe("delimited blocks", () => {
     const expected = heredoc`
       # Title
 
-      <dl><dt><strong>⚠️ WARNING</strong></dt><dd>
-
-      Beware of dog.
-
-      Oh, and watch out for zombies too.
-      </dd></dl>
+      > **⚠️ _WARNING:_**
+      > Beware of dog.
+      >
+      > Oh, and watch out for zombies too.
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -189,12 +187,10 @@ describe("delimited blocks", () => {
     const expected = heredoc`
       # Title
 
-      <dl><dt><strong><a name="key-points"></a>❗ IMPORTANT: Key points to remember</strong></dt><dd>
-
-      * Verify your sources.
-      * Cite your references.
-      * Proofread!
-      </dd></dl>
+      > **❗ _IMPORTANT:_** Key points to remember
+      > * Verify your sources.
+      > * Cite your references.
+      > * Proofread!
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -368,8 +364,7 @@ describe("delimited blocks", () => {
       \`\`\`spoiler Always visible summary
       This text won’t be visible until the user clicks the always visible text.
 
-      **💡 TIP**\\
-      Click **Always visible summary** to hide this text again.
+      > **💡 _TIP:_** Click **Always visible summary** to hide this text again.
       \`\`\`
       `;
     expect(
