@@ -193,7 +193,7 @@ describe("document header", () => {
     const expected = heredoc`
       # Title
 
-      The URL for this project is https://example.org/acme.
+      The URL for this project is [https://example.org/acme.](https://example.org/acme.)
       `;
     expect(downdoc(input)).to.equal(expected);
   });

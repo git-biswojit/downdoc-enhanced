@@ -213,7 +213,8 @@ describe("downdoc", () => {
   describe("attribute option", () => {
     it("should pass attribute specified by -a option", async () => {
       const input = "Go to {url-order} to purchase your copy.\n";
-      const expected = "Go to https://example.org/order to purchase your copy.\n";
+      const expected =
+        "Go to [https://example.org/order](https://example.org/order) to purchase your copy.\n";
       await fsp.writeFile("doc.adoc", input, "utf8");
       const args = ["-a", "url-order=https://example.org/order", "doc.adoc"];
       await downdoc({ args });
@@ -222,7 +223,8 @@ describe("downdoc", () => {
 
     it("should pass attribute specified by --attribute option", async () => {
       const input = "Go to {url-order} to purchase your copy.\n";
-      const expected = "Go to https://example.org/order to purchase your copy.\n";
+      const expected =
+        "Go to [https://example.org/order](https://example.org/order) to purchase your copy.\n";
       await fsp.writeFile("doc.adoc", input, "utf8");
       const args = ["-a", "url-order=https://example.org/order", "doc.adoc"];
       await downdoc({ args });
@@ -231,7 +233,8 @@ describe("downdoc", () => {
 
     it("should allow -a option to be specified multiple times", async () => {
       const input = "Visit {url-site} to learn about {company}.\n";
-      const expected = "Visit https://example.org to learn about ACME.\n";
+      const expected =
+        "Visit [https://example.org](https://example.org) to learn about ACME.\n";
       await fsp.writeFile("doc.adoc", input, "utf8");
       const args = [
         "-a",
@@ -344,7 +347,8 @@ describe("downdoc", () => {
 
     it("should accept options and arguments in any order", async () => {
       const input = "Visit {url-site} to learn about {company}.\n";
-      const expected = "Visit https://example.org to learn about ACME.\n";
+      const expected =
+        "Visit [https://example.org](https://example.org) to learn about ACME.\n";
       await fsp.writeFile("doc.adoc", input, "utf8");
       const args = [
         "-a",

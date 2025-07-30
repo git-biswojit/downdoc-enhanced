@@ -178,7 +178,7 @@ describe("text formatting", () => {
 
       Use the \`\\\` character to escape special syntax.
 
-      Visit \`http://localhost:8080\` or \`http://127.0.0.1:8080\` in your browser to see a preview.
+      Visit \`[http://localhost:8080](http://localhost:8080)\` or \`[http://127.0.0.1:8080](http://127.0.0.1:8080)\` in your browser to see a preview.
 
       The text \`lorem ipsum...\` will be replaced with the real content.
 

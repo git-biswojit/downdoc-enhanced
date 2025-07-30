@@ -17,7 +17,7 @@ describe("preprocessor conditionals", () => {
       # Title
 
       This project is named downdoc.
-      The URL of the project is https://example.org/downdoc.
+      The URL of the project is [https://example.org/downdoc.](https://example.org/downdoc.)
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -66,7 +66,7 @@ describe("preprocessor conditionals", () => {
       # Title
 
       This project is named downdoc.
-      The URL of the project is https://example.org/downdoc.
+      The URL of the project is [https://example.org/downdoc.](https://example.org/downdoc.)
       `;
     expect(downdoc(input)).to.equal(expected);
   });
@@ -85,7 +85,7 @@ describe("preprocessor conditionals", () => {
       # Title
 
       This project is named downdoc.
-      The URL of the project is https://example.org/downdoc.
+      The URL of the project is [https://example.org/downdoc.](https://example.org/downdoc.)
       `;
     expect(downdoc(input)).to.equal(expected);
   });

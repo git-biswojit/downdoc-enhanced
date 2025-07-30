@@ -703,4 +703,79 @@ describe("tables", () => {
       `;
     expect(downdoc(input)).to.equal(expected);
   });
+
+  it("should convert URLs in table cells to proper markdown links", () => {
+    const input = heredoc`
+      [cols="1,1,2", options="header"]
+      .demo One Provider Search and Cost Estimate
+      |===
+      |Endpoint | Environment | Description
+
+      |https://api-gateway.demo.ts.com/stateless-facade/
+      |UAT
+      |Intended for provider search and/or cost estimate API calls to the UAT environment
+
+      |https://api-gateway.ts.com/stateless-facade/
+      |PROD
+      |Intended for provider search and/or cost estimate API calls to the production environment
+      |===
+      `;
+    const expected = heredoc`
+      **demo One Provider Search and Cost Estimate**
+
+      | Endpoint | Environment | Description |
+      | --- | --- | --- |
+      | [https://api-gateway.demo.ts.com/stateless-facade/](https://api-gateway.demo.ts.com/stateless-facade/) | UAT | Intended for provider search and/or cost estimate API calls to the UAT environment |
+      | [https://api-gateway.ts.com/stateless-facade/](https://api-gateway.ts.com/stateless-facade/) | PROD | Intended for provider search and/or cost estimate API calls to the production environment |
+      `;
+    expect(downdoc(input)).to.equal(expected);
+  });
+
+  it("should handle mixed single-line and multi-line table formats", () => {
+    const input = heredoc`
+      [options="header"]
+      |===
+      |Endpoint | Environment | Description
+
+      |https://api-gateway.demo.ts.com/stateless-facade/
+      |UAT
+      |Intended for provider search and/or cost estimate API calls to the UAT environment
+
+      |https://api-gateway.ts.com/stateless-facade/ | PROD | Intended for provider search and/or cost estimate API calls to the production environment
+      |===
+      `;
+    const expected = heredoc`
+      | Endpoint | Environment | Description |
+      | --- | --- | --- |
+      | [https://api-gateway.demo.ts.com/stateless-facade/](https://api-gateway.demo.ts.com/stateless-facade/) | UAT | Intended for provider search and/or cost estimate API calls to the UAT environment |
+      | [https://api-gateway.ts.com/stateless-facade/](https://api-gateway.ts.com/stateless-facade/) | PROD | Intended for provider search and/or cost estimate API calls to the production environment |
+      `;
+    expect(downdoc(input)).to.equal(expected);
+  });
+
+  it("should handle header cells on separate lines", () => {
+    const input = heredoc`
+      [options="header"]
+      |===
+      |Endpoint
+      |Environment
+      |Description
+
+      |https://api-gateway.demo.ts.com/stateless-facade/
+      |UAT
+      |Intended for provider search and/or cost estimate API calls to the UAT environment
+
+      |https://api-gateway.ts.com/stateless-facade/
+      |PROD
+      |Intended for provider search and/or cost estimate API calls to the production environment
+      |===
+      `;
+    const expected = heredoc`
+      | Endpoint | Environment | Description |
+      | --- | --- | --- |
+      | [https://api-gateway.demo.ts.com/stateless-facade/](https://api-gateway.demo.ts.com/stateless-facade/) | UAT | Intended for provider search and/or cost estimate API calls to the UAT environment |
+      | [https://api-gateway.ts.com/stateless-facade/](https://api-gateway.ts.com/stateless-facade/) | PROD | Intended for provider search and/or cost estimate API calls to the production environment |
+      `;
+    expect(downdoc(input)).to.equal(expected);
+  });
 });
