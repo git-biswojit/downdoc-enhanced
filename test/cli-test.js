@@ -68,9 +68,9 @@ describe("downdoc", () => {
       const args = ["-h"];
       const expected = heredoc`
       downdoc ${version}
-      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
-      Convert the specified AsciiDoc FILE to a Markdown file.
-      If OUTPUT_DIR is specified, process all .adoc files in FILE directory recursively.${lf}
+      Usage: downdoc [OPTION]... FILE/DIR [OUTPUT_DIR]
+      Convert the specified AsciiDoc FILE/Files in a directory to Markdown file(s).
+      If DIR is specified, process all .adoc files in the directory recursively.${lf}
       `;
       await downdoc({ args, stdout });
       expect(stdout.string).to.startWith(expected);
@@ -81,9 +81,9 @@ describe("downdoc", () => {
       const args = ["-h"];
       const expectedStart = heredoc`
       downdoc ${version}
-      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
-      Convert the specified AsciiDoc FILE to a Markdown file.
-      If OUTPUT_DIR is specified, process all .adoc files in FILE directory recursively.${lf}
+      Usage: downdoc [OPTION]... FILE/DIR [OUTPUT_DIR]
+      Convert the specified AsciiDoc FILE/Files in a directory to Markdown file(s).
+      If DIR is specified, process all .adoc files in the directory recursively.${lf}
       `;
       const expectedIn =
         "\n  -a, --attribute name=val   set an AsciiDoc attribute; can be specified multiple times\n";
@@ -99,7 +99,7 @@ describe("downdoc", () => {
     it("should only print usage to stderr and set exit code when no options or arguments are specified", async () => {
       const args = [];
       const expected = heredoc`
-      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
+      Usage: downdoc [OPTION]... FILE/DIR [OUTPUT_DIR]
       Run 'downdoc --help' for more information.${lf}
       `;
       const p = { args, stdout, stderr };
@@ -111,7 +111,7 @@ describe("downdoc", () => {
 
     it("should only print usage to stderr and set exit code when neither args or argv are set on process", async () => {
       const expected = heredoc`
-      Usage: downdoc [OPTION]... FILE [OUTPUT_DIR]
+      Usage: downdoc [OPTION]... FILE/DIR [OUTPUT_DIR]
       Run 'downdoc --help' for more information.${lf}
       `;
       const p = { stderr };
