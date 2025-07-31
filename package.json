@@ -56,7 +56,8 @@
     "eslint-config-standard": "~17.1",
     "mocha": "~10.2",
     "nyc": "~15.1",
-    "prettier-eslint": "~15.0"
+    "prettier-eslint": "~15.0",
+    "tempy": "^3.1.0"
   },
   "nyc": {
     "all": true,
@@ -73,5 +74,8 @@
       "text"
     ],
     "reportDir": "reports"
+  },
+  "dependencies": {
+    "prettier": "^3.6.2"
   }
 }
