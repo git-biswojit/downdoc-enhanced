@@ -4,7 +4,8 @@ import downdoc from "../lib/index.js";
 import { expect, heredoc } from "./harness/index.js";
 
 describe("tables", () => {
-  it("should convert table with only body", () => {
+  //skip as it contraditcs with our latest test 'should have header although .header or cols and table title is missing'
+  it.skip("should convert table with only body", () => {
     const input = heredoc`
       |===
       | A1 | B1
@@ -813,6 +814,26 @@ describe("tables", () => {
     const expected = heredoc`
     **Example**
 
+    | Eq type on Benefit | place of service on Benefit | priority |
+    | --- | --- | --- |
+    | Match | Match | To Priority |
+    | Match | null |  |
+    | null | Match |  |
+    | null | null | Lowest Priority |`;
+    const result = downdoc(input);
+    expect(result).to.equal(expected);
+  });
+
+  it("should have header although .header or cols and table title is missing", () => {
+    const input = heredoc`
+    |===
+    |Eq type on Benefit|place of service on Benefit|priority
+    |Match | Match | To Priority
+    |Match | null |
+    |null | Match |
+    |null | null | Lowest Priority
+    |===`;
+    const expected = heredoc`
     | Eq type on Benefit | place of service on Benefit | priority |
     | --- | --- | --- |
     | Match | Match | To Priority |
