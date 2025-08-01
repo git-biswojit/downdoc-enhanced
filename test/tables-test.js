@@ -843,4 +843,28 @@ describe("tables", () => {
     const result = downdoc(input);
     expect(result).to.equal(expected);
   });
+  it("should convert ascii table with multiline rows to markdown preserving nulls and spacing", () => {
+    const input = heredoc`
+    If multiple benefits match a benefit request, the following logic is used to pick the best benefit for the estimate.
+    |===
+    |Eq type on Benefit|place of service on Benefit|priority
+    a| Match | Match | To Priority
+    a| Match | null |
+    a| null | Match |
+    a| null | null | Lowest Priority
+    |===
+  `;
+
+    const expected = heredoc`
+    If multiple benefits match a benefit request, the following logic is used to pick the best benefit for the estimate.
+    | Eq type on Benefit | place of service on Benefit | priority |
+    | --- | --- | --- |
+    | Match | Match | To Priority |
+    | Match | null |  |
+    | null | Match |  |
+    | null | null | Lowest Priority |
+  `;
+
+    expect(downdoc(input)).to.equal(expected);
+  });
 });
