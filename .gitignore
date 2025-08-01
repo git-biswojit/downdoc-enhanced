@@ -3,3 +3,4 @@
 /reports/
 /.nvmrc
 .DS_Store
+test-data/

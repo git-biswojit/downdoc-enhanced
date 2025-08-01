@@ -10,6 +10,19 @@ const { version } = JSON.parse(readFileSync(new URL("../package.json", import.me
 
 const WORK_DIR = ospath.join(ospath.dirname(new URL(import.meta.url).pathname), "work");
 
+function normalizeMdTableSeparator(md) {
+  return md
+    .split("\n")
+    .map((line) => {
+      // Normalize markdown table separator lines like |----|---| to |---|---|
+      if (/^\|(?:\s*-+\s*\|)+\s*$/.test(line)) {
+        return line.replace(/-+/g, "---");
+      }
+      return line;
+    })
+    .join("\n")
+    .trim();
+}
 describe("downdoc", () => {
   const lf = "\n";
   const oldcwd = process.cwd();
@@ -181,6 +194,58 @@ describe("downdoc", () => {
       const args = ["-o", "build/doc.md", "doc.adoc"];
       await downdoc({ args });
       expect("build/doc.md").to.be.a.file().with.contents(expected);
+    });
+
+    it("should merge 2-column header into a single line", async () => {
+      const input = heredoc`
+    [cols="1,1", options="header"]
+    .Example
+    |===
+
+    |Key
+    |Value
+    |Foo
+    |Bar
+    |===`;
+      const expected = heredoc`
+    **Example**
+
+    | Key | Value |
+    | ----- | ------- |
+    | Foo | Bar |
+  `;
+      await fsp.writeFile("doc.adoc", input, "utf8");
+      const args = ["-o", "-", "doc.adoc"];
+      await downdoc({ args, stdout });
+      expect(normalizeMdTableSeparator(stdout.string)).to.equal(
+        normalizeMdTableSeparator(expected)
+      );
+    });
+    it("should merge 3-column header into a single line", async () => {
+      const input = heredoc`
+    [cols="1,1,1", options="header"]
+    .Example
+    |===
+    |A
+    |B
+    |C
+    |1
+    |2
+    |3
+    |===`;
+      const expected = heredoc`
+    **Example**
+
+    | A | B | C |
+    | --- | --- | --- |
+    | 1 | 2 | 3 |
+  `;
+      await fsp.writeFile("doc.adoc", input, "utf8");
+      const args = ["-o", "-", "doc.adoc"];
+      await downdoc({ args, stdout });
+      expect(normalizeMdTableSeparator(stdout.string)).to.equal(
+        normalizeMdTableSeparator(expected)
+      );
     });
   });
 
