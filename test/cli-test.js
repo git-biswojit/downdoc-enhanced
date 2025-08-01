@@ -247,6 +247,30 @@ describe("downdoc", () => {
         normalizeMdTableSeparator(expected)
       );
     });
+    it("should convert CSV block to Markdown table", async () => {
+      const input = heredoc`
+    \`\`\`csv
+    name, age, city
+    Alice, 30, Paris
+    Bob, , New York
+    , 25, Boston
+    \`\`\`
+  `;
+
+      const expected = heredoc`
+    | name | age | city |
+    | --- | --- | --- |
+    | Alice | 30 | Paris |
+    | Bob |  | New York |
+    |  | 25 | Boston |
+  `;
+
+      await fsp.writeFile("doc.adoc", input, "utf8");
+      const args = ["-o", "-", "doc.adoc"];
+      await downdoc({ args, stdout });
+
+      expect(stdout.string).to.include(normalizeMdTableSeparator(expected));
+    });
   });
 
   describe("input", () => {
