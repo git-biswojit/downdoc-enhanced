@@ -17,6 +17,20 @@ describe("include workaround", () => {
     expect(downdoc(input)).to.equal(expected);
   });
 
+  it("should process include directive with file extension(adoc->md)", () => {
+    const input = heredoc`
+      = Title
+
+      include::file.adoc[]
+    `;
+    const expected = heredoc`
+      # Title
+
+      [file](file.md)
+    `;
+    expect(downdoc(input)).to.equal(expected);
+  });
+
   it("should not drop include directive", () => {
     const input = heredoc`
           = Title
