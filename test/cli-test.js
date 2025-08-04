@@ -4,12 +4,21 @@ import { readFileSync } from "node:fs";
 import fsp from "node:fs/promises";
 import ospath from "node:path";
 import { Readable } from "node:stream";
+import { temporaryDirectory } from "tempy";
 import downdoc from "../lib/cli.js";
 import { cleanDir, expect, heredoc, StringIO } from "./harness/index.js";
 const { version } = JSON.parse(readFileSync(new URL("../package.json", import.meta.url)));
 
 const WORK_DIR = ospath.join(ospath.dirname(new URL(import.meta.url).pathname), "work");
 
+async function exists(p) {
+  try {
+    await fsp.access(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
 function normalizeMdTableSeparator(md) {
   return md
     .split("\n")
@@ -270,6 +279,25 @@ describe("downdoc", () => {
       await downdoc({ args, stdout });
 
       expect(stdout.string).to.include(normalizeMdTableSeparator(expected));
+    });
+
+    it("should convert index.adoc to home.md incase of readme is specified in options", async () => {
+      const content = heredoc`
+        = Hello
+        `;
+      const baseDir = temporaryDirectory();
+      const inputFile = `${baseDir}/index.adoc`;
+      const expectedFile = `${baseDir}/home.adoc`;
+      const expectedContent = heredoc`
+        = Hello
+        `;
+      await fsp.writeFile(inputFile, content);
+
+      await downdoc({ args: ["--readme", baseDir], stdout });
+      await expect(await exists(expectedFile)).to.be.true;
+      await expect(await exists(inputFile)).to.be.false;
+
+      await expect(await fsp.readFile(expectedFile, "utf8")).to.equal(expectedContent);
     });
   });
 

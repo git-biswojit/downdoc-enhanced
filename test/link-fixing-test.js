@@ -84,7 +84,7 @@ This is the helper documentation.`
 
     // Main file in docs/api that links to providers
     await fsp.writeFile(
-      ospath.join(inputDir, "docs", "api", "index.adoc"),
+      ospath.join(inputDir, "docs", "api", "linker.adoc"),
       `= API Documentation
 
 See <<../providers/providers.adoc>> for provider information.
@@ -113,7 +113,7 @@ This is the main documentation.`
 
     // Check that the links are correctly resolved
     const apiContent = await fsp.readFile(
-      ospath.join(outputDir, "docs", "api", "index.md"),
+      ospath.join(outputDir, "docs", "api", "linker.md"),
       "utf8"
     );
 
@@ -258,7 +258,7 @@ This is the API documentation.`
 
     // Main file in docs/api that has incorrect relative path
     await fsp.writeFile(
-      ospath.join(inputDir, "docs", "api", "index.adoc"),
+      ospath.join(inputDir, "docs", "api", "linker.adoc"),
       `= API Documentation
 
 See <<providers/providers.adoc>> for provider information.
@@ -287,7 +287,7 @@ This is the main documentation.`
 
     // Check that the incorrect relative path is fixed
     const apiContent = await fsp.readFile(
-      ospath.join(outputDir, "docs", "api", "index.md"),
+      ospath.join(outputDir, "docs", "api", "linker.md"),
       "utf8"
     );
 
